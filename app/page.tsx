@@ -15,6 +15,12 @@ interface Product {
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [cart, setCart] = useState<Product[]>([]);
+
+  // ✅ Fix 1: handleAddToCart-a useEffect-ukku VELIYE kondunthalum
+  const handleAddToCart = (product: Product) => {
+    setCart((prevCart) => [...prevCart, product]);
+  };
 
   useEffect(() => {
     async function fetchProducts() {
@@ -37,9 +43,15 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">
-          Featured Products
-        </h1>
+        {/* ✅ Fix 2: Cart-la evalo items irukku nu paarkka Header-la badge text add panniyulom */}
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Featured Products
+          </h1>
+          <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+            Items in Cart: {cart.length}
+          </span>
+        </div>
 
         {loading && (
           <div className="flex justify-center items-center h-64">
@@ -87,7 +99,10 @@ export default function Home() {
                       ${product.price}
                     </p>
                   </div>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl text-sm transition-colors">
+                  <button
+                    onClick={() => handleAddToCart(product)}
+                    className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-medium px-4 py-2 rounded-xl text-sm transition-all shadow-sm"
+                  >
                     Add to Cart
                   </button>
                 </div>
