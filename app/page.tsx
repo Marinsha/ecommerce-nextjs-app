@@ -1,5 +1,6 @@
 "use client";
 
+import { useCart } from "@/context/CartContext";
 import { useEffect, useState } from "react";
 
 interface Product {
@@ -15,12 +16,9 @@ interface Product {
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [cart, setCart] = useState<Product[]>([]);
 
-  // ✅ Fix 1: handleAddToCart-a useEffect-ukku VELIYE kondunthalum
-  const handleAddToCart = (product: Product) => {
-    setCart((prevCart) => [...prevCart, product]);
-  };
+  // 1. Context-la irundhu global addToCart function-aiyum cart state-aiyum edukkurom
+  const { addToCart, cart } = useCart();
 
   useEffect(() => {
     async function fetchProducts() {
@@ -43,13 +41,13 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
-        {/* ✅ Fix 2: Cart-la evalo items irukku nu paarkka Header-la badge text add panniyulom */}
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">
             Featured Products
           </h1>
+          {/* 2. Global cart length display panroam */}
           <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-            Items in Cart: {cart.length}
+            Items in Cart: {cart.reduce((total, item) => total + item.quantity, 0)}
           </span>
         </div>
 
@@ -99,8 +97,9 @@ export default function Home() {
                       ${product.price}
                     </p>
                   </div>
+                  {/* 3. Button click-la Global addToCart-a call panroam */}
                   <button
-                    onClick={() => handleAddToCart(product)}
+                    onClick={() => addToCart(product)}
                     className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-medium px-4 py-2 rounded-xl text-sm transition-all shadow-sm"
                   >
                     Add to Cart

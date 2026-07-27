@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { ShoppingCart, Store } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
-interface NavbarProps {
-  cartCount?: number;
-}
+export default function Navbar() {
+  const { cart, toggleCart } = useCart(); // Context-la irundhu cart & toggle function edukkurom
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0); // Total items count calculate panrom
 
-export default function Navbar({ cartCount = 0 }: NavbarProps) {
+
   return (
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -34,8 +35,10 @@ export default function Navbar({ cartCount = 0 }: NavbarProps) {
         </nav>
 
         {/* Cart Button with Badge */}
-        <button className="relative p-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition flex items-center justify-center">
-          <ShoppingCart className="w-5 h-5" />
+<button 
+  onClick={toggleCart} // 🆕 Cart Drawer open/close toggling
+  className="relative p-2.5 text-gray-700 hover:bg-gray-100 rounded-xl transition flex items-center justify-center"
+>          <ShoppingCart className="w-5 h-5" />
           {cartCount > 0 && (
             <span className="absolute -top-1 -right-1 bg-blue-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">
               {cartCount}

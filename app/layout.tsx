@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar"; // <-- Import Navbar
+import { CartProvider } from "@/context/CartContext"; // 🆕 Import CartProvider
+import CartDrawer from "@/components/CartDrawer";     // 🆕 Import CartDrawer
 
 const geist = Geist({
   subsets: ["latin"],
@@ -19,9 +21,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geist.className} antialiased`}>
-        <Navbar cartCount={0} /> {/* <-- Add Navbar here */}
-        {children}
+     <body className={`${geist.className} antialiased`}>
+        {/* Whole App-ukku Context Provider wrap panrom */}
+        <CartProvider>
+          <Navbar />
+          {children}
+          <CartDrawer /> {/* 🆕 Global Cart Drawer */}
+        </CartProvider>
       </body>
     </html>
   );
