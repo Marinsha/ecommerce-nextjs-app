@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { X, Trash2, ShoppingBag } from "lucide-react";
 
@@ -75,9 +75,14 @@ export default function CartDrawer() {
                   ${totalPrice.toFixed(2)}
                 </span>
               </div>
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition">
-                Proceed to Checkout
-              </button>
+              {/* Old Button-ukku badhila indha Link wrapper add pannunga */}
+<Link
+  href="/checkout"
+  onClick={toggleCart} // Drawer-a close panni checkout page-ukku pooga
+  className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-sm"
+>
+  Proceed to Checkout
+</Link>
             </div>
           )}
 
