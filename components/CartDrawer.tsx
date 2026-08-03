@@ -100,7 +100,6 @@ export default function CartDrawer() {
                 </span>
               </div>
 
-              {/* Single Link tag */}
               <Link
                 href="/checkout"
                 onClick={toggleCart}
