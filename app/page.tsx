@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { useEffect, useState } from "react";
 
@@ -17,7 +18,7 @@ export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // 1. Context-la irundhu global addToCart function-aiyum cart state-aiyum edukkurom
+  // Context-la irundhu global addToCart function-aiyum cart state-aiyum edukkurom
   const { addToCart, cart } = useCart();
 
   useEffect(() => {
@@ -45,7 +46,6 @@ export default function Home() {
           <h1 className="text-3xl font-bold text-gray-800">
             Featured Products
           </h1>
-          {/* 2. Global cart length display panroam */}
           <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
             Items in Cart: {cart.reduce((total, item) => total + item.quantity, 0)}
           </span>
@@ -69,22 +69,29 @@ export default function Home() {
               key={product._id}
               className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 overflow-hidden flex flex-col justify-between"
             >
-              <div className="h-48 bg-gray-100 overflow-hidden relative">
+              {/* Product Image Link */}
+              <Link href={`/products/${product._id}`} className="block h-48 bg-gray-100 overflow-hidden relative group">
                 <img
                   src={product.imageUrl || "https://via.placeholder.com/150"}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-              </div>
+              </Link>
 
+              {/* Product Details & Action */}
               <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
                   <span className="text-xs font-semibold text-blue-600 uppercase tracking-wider">
                     {product.category}
                   </span>
-                  <h2 className="text-lg font-bold text-gray-900 mt-1">
-                    {product.name}
-                  </h2>
+                  
+                  {/* Product Title Link */}
+                  <Link href={`/products/${product._id}`}>
+                    <h2 className="text-lg font-bold text-gray-900 mt-1 hover:text-blue-600 transition-colors">
+                      {product.name}
+                    </h2>
+                  </Link>
+
                   <p className="text-sm text-gray-600 mt-2 line-clamp-2">
                     {product.description}
                   </p>
@@ -97,7 +104,7 @@ export default function Home() {
                       ${product.price}
                     </p>
                   </div>
-                  {/* 3. Button click-la Global addToCart-a call panroam */}
+
                   <button
                     onClick={() => addToCart(product)}
                     className="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-medium px-4 py-2 rounded-xl text-sm transition-all shadow-sm"
