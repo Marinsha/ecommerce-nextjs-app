@@ -21,6 +21,7 @@ interface CartContextType {
   isOpen: boolean;
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void; // 🆕 1. Type Declaration Add Panniyulom
   toggleCart: () => void;
   totalPrice: number;
 }
@@ -43,11 +44,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-    setIsOpen(true); // Cart drawer-a open pannum
+    setIsOpen(true);
   };
 
   const removeFromCart = (productId: string) => {
     setCart((prev) => prev.filter((item) => item._id !== productId));
+  };
+
+  // 🆕 2. Function Logic: Quantity-a update pannum. Quantity 0 or zero-va vida kammi aana auto-delete pannum!
+  const updateQuantity = (productId: string, quantity: number) => {
+    if (quantity <= 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setCart((prev) =>
+      prev.map((item) =>
+        item._id === productId ? { ...item, quantity } : item
+      )
+    );
   };
 
   const toggleCart = () => setIsOpen(!isOpen);
@@ -64,6 +78,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         isOpen,
         addToCart,
         removeFromCart,
+        updateQuantity, // 🆕 3. App-kulla use panna Provider Value-la pass panrom
         toggleCart,
         totalPrice,
       }}
