@@ -6,7 +6,8 @@ import { ArrowLeft, CheckCircle2, ShoppingBag } from "lucide-react";
 import { useState } from "react";
 
 export default function CheckoutPage() {
-    const { cart, totalPrice } = useCart();
+    // 🆕 1. clearCart function-a destruct panron
+    const { cart, totalPrice, clearCart } = useCart();
     const [isOrdered, setIsOrdered] = useState(false);
 
     // Form handling (Delivery Info)
@@ -24,6 +25,10 @@ export default function CheckoutPage() {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // 🆕 2. Order place aana udane Cart items-a clear panron!
+        clearCart();
+
         // Success State
         setIsOrdered(true);
     };

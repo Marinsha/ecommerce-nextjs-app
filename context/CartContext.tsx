@@ -21,7 +21,8 @@ interface CartContextType {
   isOpen: boolean;
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void; // 🆕 1. Type Declaration Add Panniyulom
+  updateQuantity: (productId: string, quantity: number) => void;
+  clearCart: () => void; // 🆕 1. Type declaration for clearCart
   toggleCart: () => void;
   totalPrice: number;
 }
@@ -51,7 +52,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setCart((prev) => prev.filter((item) => item._id !== productId));
   };
 
-  // 🆕 2. Function Logic: Quantity-a update pannum. Quantity 0 or zero-va vida kammi aana auto-delete pannum!
   const updateQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
@@ -62,6 +62,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         item._id === productId ? { ...item, quantity } : item
       )
     );
+  };
+
+  // 🆕 2. Function logic to clear all items in cart
+  const clearCart = () => {
+    setCart([]);
   };
 
   const toggleCart = () => setIsOpen(!isOpen);
@@ -78,7 +83,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         isOpen,
         addToCart,
         removeFromCart,
-        updateQuantity, // 🆕 3. App-kulla use panna Provider Value-la pass panrom
+        updateQuantity,
+        clearCart, // 🆕 3. Pass clearCart in Provider Value
         toggleCart,
         totalPrice,
       }}
