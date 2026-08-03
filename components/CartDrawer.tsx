@@ -1,10 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { X, Trash2, ShoppingBag } from "lucide-react";
+import { X, Trash2, ShoppingBag, Plus, Minus } from "lucide-react";
 
 export default function CartDrawer() {
-  const { cart, isOpen, toggleCart, removeFromCart, totalPrice } = useCart();
+  const { cart, isOpen, toggleCart, removeFromCart, updateQuantity, totalPrice } = useCart();
 
   if (!isOpen) return null;
 
@@ -51,13 +52,36 @@ export default function CartDrawer() {
                     <h3 className="font-semibold text-gray-900 text-sm">
                       {item.name}
                     </h3>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-gray-500 mb-2">
                       ${item.price} x {item.quantity}
                     </p>
+
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                        className="w-6 h-6 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs active:scale-95 transition"
+                      >
+                        <Minus className="w-3 h-3" />
+                      </button>
+
+                      <span className="font-bold text-xs text-gray-800 w-4 text-center">
+                        {item.quantity}
+                      </span>
+
+                      <button
+                        onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                        className="w-6 h-6 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xs active:scale-95 transition"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Single Delete Button */}
                   <button
                     onClick={() => removeFromCart(item._id)}
-                    className="text-red-500 hover:text-red-700 p-2"
+                    className="text-red-500 hover:text-red-700 p-2 transition"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -75,9 +99,15 @@ export default function CartDrawer() {
                   ${totalPrice.toFixed(2)}
                 </span>
               </div>
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition">
+
+              {/* Single Link tag */}
+              <Link
+                href="/checkout"
+                onClick={toggleCart}
+                className="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-sm"
+              >
                 Proceed to Checkout
-              </button>
+              </Link>
             </div>
           )}
 
